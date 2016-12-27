@@ -41,5 +41,6 @@ namespace Classified.Models
         public virtual Category Category { get; set; }
         public virtual ICollection<ClassifiedLocation> ClassifiedLocations { get; set; }
         public virtual ICollection<ClassifiedAttribute> ClassifiedAttributes { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
     }
 }

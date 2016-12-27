@@ -28,9 +28,35 @@ namespace Classified.Models
         public DbSet<PCL> PCLs { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<ClassifiedLocation> ClassifiedLocations { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // to hierahical structure of Categories
+            modelBuilder.Entity<Category>()
+                        .HasOptional(c => c.CategoryFather)
+                        .WithMany()
+                        .HasForeignKey(cf => cf.CategoryFatherID);
 
+            // Messages relations
+            modelBuilder.Entity<Message>()
+                        .HasRequired(b => b.Sender)
+                        .WithMany(a => a.MessagesSent)
+                        .HasForeignKey(b => b.SenderID)
+                        .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Message>()
+                        .HasRequired(b => b.Receiver)
+                        .WithMany(a => a.MessagesReceived)
+                        .HasForeignKey(b => b.ReceiverID)
+                        .WillCascadeOnDelete(false);
+
+
+            modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
+            modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+            modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+        }
 
 
         public static ApplicationDbContext Create()

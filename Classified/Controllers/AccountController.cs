@@ -151,7 +151,7 @@ namespace Classified.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Nick, Email = model.Email };
+                var user = new User { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 // i have to check if user with the same UserName not exists in database

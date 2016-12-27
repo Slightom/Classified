@@ -216,6 +216,7 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\PCL.cs" />
     <Compile Include="Models\PersonalizedCategory.cs" />
+    <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
