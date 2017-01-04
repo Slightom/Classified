@@ -2,22 +2,24 @@
 
 @{
     ViewBag.Title = "Edit";
+
 }
 
 <h2>Edit</h2>
 
+<input id="specialCategoryName" value=@Model.Category.Name style="display:none"/>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Classifieds", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Classified</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ClassifiedID)
 
-        <div class="form-group">
+        <div class="form-group" style="display:none;">
             @Html.LabelFor(model => model.UserID, "UserID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("UserID", null, htmlAttributes: new { @class = "form-control" })
@@ -36,20 +38,25 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Description, 10, 80, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CategoryID, "CategoryID", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CategoryID, "Category", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("CategoryID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+                @Html.Hidden("CategoryID", Model.CategoryID)
+                @Html.Action("CategoryChoosingPartial", "Home", new { id = Model.ClassifiedID })
             </div>
         </div>
 
-        <div class="form-group">
+        <div id="errorCategory">
+            <div class="col-md-2"></div>
+            <div class="col-md-10"> <span style="color: red">@ViewBag.Category0</span> <br><br></div>
+        </div>
+
+        <div class="form-group" style="display:none;">
             @Html.LabelFor(model => model.DateAdded, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.DateAdded, new { htmlAttributes = new { @class = "form-control" } })
@@ -68,12 +75,32 @@
         <div class="form-group">
             @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("State", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+
+
+
+        <div id="location">
+            @Html.Action("GenerateLocations", "Classifieds", new { ln = Model.ClassifiedLocations.ElementAt(0).Location.LocationName })
+        </div>
+
+
+        <div id="allAttributes">
+
+        </div>
+
+        <div id="location">
+            @Html.Action("GenerateGallery2", "Classifieds", new { id=Model.ClassifiedID })
+        </div>
+
+
+
+
+
+        <div class="form-group" style="display:none">
             @Html.LabelFor(model => model.Counter, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Counter, new { htmlAttributes = new { @class = "form-control" } })
@@ -81,10 +108,11 @@
             </div>
         </div>
 
-        <div class="form-group">
+
+        <div class="form-group" style="display:@if(User.IsInRole("Admin")) { <text>unset;</text> } else { <text>none;</text> }">
             @Html.LabelFor(model => model.Reported, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Reported, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Reported, 10, 80, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Reported, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -104,3 +132,86 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        $("#allAttributes").load('@(Url.Action("GenerateAllAttributes","Home", new { id=Model.ClassifiedID }))');
+        
+        // part 3: show selected Attributes
+        for (var i = 0; i < 1000000000; i++) {
+
+        }
+
+        var bla = $('#specialCategoryName').val();
+
+        $(document).ready(function () {
+            $.post("/Home/giveMeSelectedAttributes", { x: bla }, function (p) {
+                //alert(p);
+                for (var i = 0, l = p.length; i < l; i++) {
+                    $("#" + p[i]).show();
+                }
+            });
+        });
+    });
+
+
+    function choosingCategory(xx) {
+
+        // part 1: change button text and generate category path
+        updateCategory(xx);
+
+
+        // part 2: refresh partialView
+        refreshPartialView();
+
+
+        // part 3: show selected Attributes
+        for (var i = 0; i < 100000000; i++) {
+
+        }
+
+        showSelectedAttributes(xx);
+
+
+        // part 4: set categoryID for model
+        setCategoryID(xx);
+    }
+
+    function updateCategory(xx)
+    {
+        $.post("/Home/categoryPath", { x: xx }, function (p) {
+            document.getElementById("categoryPath0").innerHTML = p;
+        });
+
+        document.getElementById("dLabel").innerHTML = "Change";
+
+    }
+
+    function refreshPartialView()
+    {
+        $("#allAttributes").load('@(Url.Action("GenerateAllAttributes","Home"))');
+    }
+
+    function showSelectedAttributes(xx)
+    {
+
+        $(document).ready(function(){
+            $.post("/Home/giveMeSelectedAttributes", { x: xx }, function (p) {
+                alert(p);
+                for (var i = 0, l = p.length; i < l; i++) {
+                    $("#" + p[i]).show();
+                }
+            });
+        });
+    }
+
+    function setCategoryID(xx) {
+        $.post("/Home/categoryID", { x: xx }, function (p) {
+            document.getElementById('CategoryID').value = p;
+        });
+    }
+
+</script>

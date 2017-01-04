@@ -64,6 +64,7 @@ namespace ClassifiedMVC.Models
             return new ApplicationDbContext();
         }
 
-
+        public System.Data.Entity.DbSet<ClassifiedMVC.Models.AllAtributesModel> AllAtributesModels { get; set; }
+        public System.Data.Entity.DbSet<ClassifiedMVC.Models.UploadModel> UploadModels { get; set; }
     }
 }

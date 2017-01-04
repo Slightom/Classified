@@ -1,4 +1,4 @@
-namespace ClassifiedMVC.Migrations
+﻿namespace ClassifiedMVC.Migrations
 {
     using System;
     using System.Data.Entity;
@@ -95,7 +95,7 @@ namespace ClassifiedMVC.Migrations
             context.SaveChanges();
 
             b = new BannedWord();
-            b.Name = "psia ko��".ToString();
+            b.Name = "psia kość".ToString();
             context.BannedWords.AddOrUpdate(p => p.Name, b);
             context.SaveChanges();
 
@@ -105,7 +105,7 @@ namespace ClassifiedMVC.Migrations
             context.SaveChanges();
 
             b = new BannedWord();
-            b.Name = "pata�ach".ToString();
+            b.Name = "patałach".ToString();
             context.BannedWords.AddOrUpdate(p => p.Name, b);
             context.SaveChanges();
 
@@ -126,8 +126,8 @@ namespace ClassifiedMVC.Migrations
 
 
             AdminMessage am = new AdminMessage();
-            am.Title = "Weso�ych �wi�t!";
-            am.Text = "Administratorzy witryny MyOLX �ycz� wszystkim u�ytkownikom Weso�ych �wi�t!";
+            am.Title = "Wesołych Świąt!";
+            am.Text = "Administratorzy witryny MyOLX Życzą wszystkim użytkownikom Wesołych Świąt!";
             am.Date = new DateTime(2016, 12, 20, 10, 10, 10);
             context.AdminMessages.AddOrUpdate(p => p.Title, am);
 
@@ -142,7 +142,7 @@ namespace ClassifiedMVC.Migrations
             Message m = new Message();
             m.SenderID = ids;
             m.ReceiverID = idr;
-            m.Text = "cze��";
+            m.Text = "cześć";
             m.Date = new DateTime(2016, 11, 20, 10, 10, 10);
             m.Read = true;
             context.Messages.AddOrUpdate(p => p.Date, m);
@@ -153,7 +153,7 @@ namespace ClassifiedMVC.Migrations
             m = new Message();
             m.SenderID = ids;
             m.ReceiverID = idr;
-            m.Text = "no cze��";
+            m.Text = "no cześć";
             m.Date = new DateTime(2016, 11, 20, 10, 10, 15);
             m.Read = true;
             context.Messages.AddOrUpdate(p => p.Date, m);
@@ -167,7 +167,7 @@ namespace ClassifiedMVC.Migrations
             m.Text = "idziemy na piwo?";
             m.Read = true;
             m.Date = new DateTime(2016, 11, 20, 10, 11, 5);
-            context.Messages.AddOrUpdate(m);
+            context.Messages.AddOrUpdate(p => p.Date, m);
             context.SaveChanges();
 
             ids = context.Users.Where(n => n.UserName == "jola17").Select(n => n.Id).FirstOrDefault();
@@ -178,7 +178,7 @@ namespace ClassifiedMVC.Migrations
             m.Text = "za 15 minut na murkach";
             m.Read = true;
             m.Date = new DateTime(2016, 11, 20, 10, 11, 17);
-            context.Messages.AddOrUpdate(m);
+            context.Messages.AddOrUpdate(p => p.Date, m);
             context.SaveChanges();
 
 
@@ -190,7 +190,7 @@ namespace ClassifiedMVC.Migrations
             m.Text = "elo";
             m.Read = true;
             m.Date = new DateTime(2016, 11, 20, 10, 11, 29);
-            context.Messages.AddOrUpdate(m);
+            context.Messages.AddOrUpdate(p => p.Date, m);
             context.SaveChanges();
 
 
@@ -348,6 +348,17 @@ namespace ClassifiedMVC.Migrations
             context.Attributes.AddOrUpdate(p => p.Name, a);
             context.SaveChanges();
 
+            a = new Models.Attribute();
+            a.Name = "Number of pages";
+            a.Type = "int";
+            context.Attributes.AddOrUpdate(p => p.Name, a);
+            context.SaveChanges();
+
+            a = new Models.Attribute();
+            a.Name = "Publication Year";
+            a.Type = "int";
+            context.Attributes.AddOrUpdate(p => p.Name, a);
+            context.SaveChanges();
 
 
 
@@ -567,6 +578,14 @@ namespace ClassifiedMVC.Migrations
             context.AttributeValues.AddOrUpdate(p => p.Value, av);
             context.SaveChanges();
 
+
+
+
+
+
+
+
+
             int cid = context.Categories.Where(p => p.Name == "Cars").Select(p => p.CategoryID).First();
             aid = context.Attributes.Where(p => p.Name == "fuel").Select(p => p.AttributeID).First();
             CategoryAttribute ca = new CategoryAttribute();
@@ -632,49 +651,71 @@ namespace ClassifiedMVC.Migrations
             context.SaveChanges();
 
 
+            cid = context.Categories.Where(p => p.Name == "Books").Select(p => p.CategoryID).First();
+            aid = context.Attributes.Where(p => p.Name == "Number of pages").Select(p => p.AttributeID).First();
+            ca = new CategoryAttribute();
+            ca.CategoryID = cid;
+            ca.AttributeID = aid;
+            context.CategoryAttributes.AddOrUpdate(p => new { p.AttributeID, p.CategoryID }, ca);
+            context.SaveChanges();
+
+            cid = context.Categories.Where(p => p.Name == "Literature").Select(p => p.CategoryID).First();
+            aid = context.Attributes.Where(p => p.Name == "Publication Year").Select(p => p.AttributeID).First();
+            ca = new CategoryAttribute();
+            ca.CategoryID = cid;
+            ca.AttributeID = aid;
+            context.CategoryAttributes.AddOrUpdate(p => new { p.AttributeID, p.CategoryID }, ca);
+            context.SaveChanges();
+
+
+
+
+
+
+
             Location l = new Location();
-            l.Name = "Bia�ystok";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Białystok";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Bia�ystok, Dziesi�ciny";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Białystok, Dziesięciny";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Bia�ystok, Centrum";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Białystok, Centrum";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Bia�ystok, Piasta";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Białystok, Piasta";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Bia�ystok, Bema";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Białystok, Bema";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Warszawa";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Warszawa";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Warszawa, Mokot�w";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Warszawa, Mokotów";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Warszawa, Kabaty";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Warszawa, Kabaty";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Warszawa, M�ociny";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Warszawa, Młociny";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Warszawa, Stare Miasto";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Warszawa, Stare Miasto";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
             l = new Location();
-            l.Name = "Warszawa, �r�dmie�cie";
-            context.Locations.AddOrUpdate(p => p.Name, l);
+            l.LocationName = "Warszawa, Śródmieście";
+            context.Locations.AddOrUpdate(p => p.LocationName, l);
 
 
             string uid = context.Users.Where(p => p.UserName == "slightom").Select(p => p.Id).First();
@@ -682,13 +723,14 @@ namespace ClassifiedMVC.Migrations
             Classified cl = new Classified();
             cl.UserID = uid;
             cl.Name = "Audi 80 2.0 benzyna";
-            cl.Description = "Mam do sprzedania elegancki samoch�d Audi 80 rocznik 95, silnik 2.0 w benzynie.";
+            cl.Description = "Mam do sprzedania elegancki samochód Audi 80 rocznik 95, silnik 2.0 w benzynie.";
             cl.CategoryID = cid;
             cl.DateAdded = new DateTime(2016, 12, 12, 13, 45, 00);
             cl.Counter = 12;
             cl.Reported = "";
             cl.Price = 6500;
             cl.State = "Used";
+            cl.CategoryPath = "Motoring >> Cars >> Audi";
             context.Classifieds.AddOrUpdate(p => p.Name, cl);
             context.SaveChanges();
 
@@ -765,18 +807,12 @@ namespace ClassifiedMVC.Migrations
             context.ClassifiedAttributes.AddOrUpdate(p => new { p.ClassifiedID, p.AttributeID }, cla);
             context.SaveChanges();
 
-
-
-
-
-
-            int lid = context.Locations.Where(p => p.Name == "Bia�ystok, Dziesi�ciny").Select(p => p.LocationID).First();
+            int lid = context.Locations.Where(p => p.LocationName == "Białystok, Dziesięciny").Select(p => p.LocationID).First();
             ClassifiedLocation cll = new ClassifiedLocation();
             cll.ClassifiedID = clid;
             cll.LocationID = lid;
             context.ClassifiedLocations.AddOrUpdate(p => new { p.LocationID, p.ClassifiedID }, cll);
             context.SaveChanges();
-
 
 
 
@@ -795,13 +831,12 @@ namespace ClassifiedMVC.Migrations
 
 
             int pcid = context.PersonalizedCategories.Where(p => p.Category.Name == "Cars").Select(p => p.PersonalizedCategoryID).First();
-            lid = context.Locations.Where(p => p.Name == "Bia�ystok").Select(p => p.LocationID).First();
+            lid = context.Locations.Where(p => p.LocationName == "Białystok").Select(p => p.LocationID).First();
             PCL pcl = new PCL();
             pcl.PersonalizedCategoryID = pcid;
             pcl.LocationID = lid;
             context.PCLs.AddOrUpdate(p => new { p.PersonalizedCategoryID, p.LocationID }, pcl);
             context.SaveChanges();
-
 
 
 
@@ -831,6 +866,286 @@ namespace ClassifiedMVC.Migrations
             ph.ClassifiedID = clid;
             ph.MainPhoto = false;
             ph.Path = "/Content/photos/audi80_3.jpg";
+            context.Photos.AddOrUpdate(p => p.Path, ph);
+            context.SaveChanges();
+
+
+
+
+
+
+
+
+
+
+
+
+            ///////////////////////////////////////////////
+            uid = context.Users.Where(p => p.UserName == "witek15").Select(p => p.Id).First();
+            cid = context.Categories.Where(p => p.Name == "For Children").Select(p => p.CategoryID).First();
+            cl = new Classified();
+            cl.UserID = uid;
+            cl.Name = "Król Lew (idealny stan)";
+            cl.Description = "Mam do sprzedania cudowną książkę 'Król Lew'.";
+            cl.CategoryID = cid;
+            cl.DateAdded = new DateTime(2017, 01, 01, 13, 45, 00);
+            cl.Counter = 5;
+            cl.Reported = "";
+            cl.Price = 15;
+            cl.State = "Used";
+            cl.CategoryPath = "Music and Education >> Books >> For children";
+            context.Classifieds.AddOrUpdate(p => p.Name, cl);
+            context.SaveChanges();
+
+
+
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Król Lew (idealny stan)").Select(p => p.ClassifiedID).First();
+            lid = context.Locations.Where(p => p.LocationName == "Białystok, Centrum").Select(p => p.LocationID).First();
+            cll = new ClassifiedLocation();
+            cll.ClassifiedID = clid;
+            cll.LocationID = lid;
+            context.ClassifiedLocations.AddOrUpdate(p => new { p.LocationID, p.ClassifiedID }, cll);
+            context.SaveChanges();
+
+
+
+
+            ph = new Photo();
+            ph.ClassifiedID = clid;
+            ph.MainPhoto = true;
+            ph.Path = "/Content/photos/krolLew_main.jpg";
+            context.Photos.AddOrUpdate(p => p.Path, ph);
+            context.SaveChanges();
+
+            ph = new Photo();
+            ph.ClassifiedID = clid;
+            ph.MainPhoto = false;
+            ph.Path = "/Content/photos/krolLew_1.jpg";
+            context.Photos.AddOrUpdate(p => p.Path, ph);
+            context.SaveChanges();
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Król Lew (idealny stan)").Select(p => p.ClassifiedID).First();
+            aid = context.Attributes.Where(p => p.Name == "Number of pages").Select(p => p.AttributeID).First();
+            cla = new ClassifiedAttribute();
+            cla.ClassifiedID = clid;
+            cla.AttributeID = aid;
+            cla.Value = "120";
+            context.ClassifiedAttributes.AddOrUpdate(p => new { p.ClassifiedID, p.AttributeID }, cla);
+            context.SaveChanges();
+
+
+
+
+
+
+
+
+
+            ///////////////////////////////////////////////////////////////
+            uid = context.Users.Where(p => p.UserName == "witek15").Select(p => p.Id).First();
+            cid = context.Categories.Where(p => p.Name == "Books").Select(p => p.CategoryID).First();
+            cl = new Classified();
+            cl.UserID = uid;
+            cl.Name = "Dziennikarz śledczy";
+            cl.Description = "Mam do sprzedania bardzo ciekawą książkę 'Dziennikarz śledczy'. Bohaterem książki jest Cezary Gmyz.";
+            cl.CategoryID = cid;
+            cl.DateAdded = new DateTime(2017, 01, 02, 13, 45, 00);
+            cl.Counter = 9;
+            cl.Reported = "";
+            cl.Price = 30;
+            cl.State = "New";
+            cl.CategoryPath = "Music and Education >> Books";
+            context.Classifieds.AddOrUpdate(p => p.Name, cl);
+            context.SaveChanges();
+
+
+
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Dziennikarz śledczy").Select(p => p.ClassifiedID).First();
+            lid = context.Locations.Where(p => p.LocationName == "Białystok, Bema").Select(p => p.LocationID).First();
+            cll = new ClassifiedLocation();
+            cll.ClassifiedID = clid;
+            cll.LocationID = lid;
+            context.ClassifiedLocations.AddOrUpdate(p => new { p.LocationID, p.ClassifiedID }, cll);
+            context.SaveChanges();
+
+
+
+
+            ph = new Photo();
+            ph.ClassifiedID = clid;
+            ph.MainPhoto = true;
+            ph.Path = "/Content/photos/dziennikarzSledczy_main.jpg";
+            context.Photos.AddOrUpdate(p => p.Path, ph);
+            context.SaveChanges();
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Dziennikarz śledczy").Select(p => p.ClassifiedID).First();
+            aid = context.Attributes.Where(p => p.Name == "Number of pages").Select(p => p.AttributeID).First();
+            cla = new ClassifiedAttribute();
+            cla.ClassifiedID = clid;
+            cla.AttributeID = aid;
+            cla.Value = "220";
+            context.ClassifiedAttributes.AddOrUpdate(p => new { p.ClassifiedID, p.AttributeID }, cla);
+            context.SaveChanges();
+
+
+
+            ///////////////////////////////////////////////////////////////
+            uid = context.Users.Where(p => p.UserName == "witek15").Select(p => p.Id).First();
+            cid = context.Categories.Where(p => p.Name == "Literature").Select(p => p.CategoryID).First();
+            cl = new Classified();
+            cl.UserID = uid;
+            cl.Name = "Call of the wild";
+            cl.Description = "Mam do sprzedania bardzo ciekawą książkę 'Zew Krwi'.";
+            cl.CategoryID = cid;
+            cl.DateAdded = new DateTime(2017, 01, 03, 13, 45, 00);
+            cl.Counter = 19;
+            cl.Reported = "";
+            cl.Price = 29.99;
+            cl.State = "New";
+            cl.CategoryPath = "Music and Education >> Books >> Literature";
+            context.Classifieds.AddOrUpdate(p => p.Name, cl);
+            context.SaveChanges();
+
+
+
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Call of the wild").Select(p => p.ClassifiedID).First();
+            lid = context.Locations.Where(p => p.LocationName == "Białystok, Bema").Select(p => p.LocationID).First();
+            cll = new ClassifiedLocation();
+            cll.ClassifiedID = clid;
+            cll.LocationID = lid;
+            context.ClassifiedLocations.AddOrUpdate(p => new { p.LocationID, p.ClassifiedID }, cll);
+            context.SaveChanges();
+
+
+
+
+            ph = new Photo();
+            ph.ClassifiedID = clid;
+            ph.MainPhoto = true;
+            ph.Path = "/Content/photos/callOfTheWild_main.jpg";
+            context.Photos.AddOrUpdate(p => p.Path, ph);
+            context.SaveChanges();
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Call of the wild").Select(p => p.ClassifiedID).First();
+            aid = context.Attributes.Where(p => p.Name == "Number of pages").Select(p => p.AttributeID).First();
+            cla = new ClassifiedAttribute();
+            cla.ClassifiedID = clid;
+            cla.AttributeID = aid;
+            cla.Value = "184";
+            context.ClassifiedAttributes.AddOrUpdate(p => new { p.ClassifiedID, p.AttributeID }, cla);
+            context.SaveChanges();
+
+            aid = context.Attributes.Where(p => p.Name == "Publication Year").Select(p => p.AttributeID).First();
+            cla = new ClassifiedAttribute();
+            cla.ClassifiedID = clid;
+            cla.AttributeID = aid;
+            cla.Value = "2010";
+            context.ClassifiedAttributes.AddOrUpdate(p => new { p.ClassifiedID, p.AttributeID }, cla);
+            context.SaveChanges();
+
+
+
+
+
+
+            ///////////////////////////////////////////////////////////////
+            uid = context.Users.Where(p => p.UserName == "jola17").Select(p => p.Id).First();
+            cid = context.Categories.Where(p => p.Name == "Music and Education").Select(p => p.CategoryID).First();
+            cl = new Classified();
+            cl.UserID = uid;
+            cl.Name = "CORT SFX-E NS Gitara elektroakustyczna";
+            cl.Description = "Mam do sprzedania bardzo ładnie brzmiącą gitarę firmy CORT";
+            cl.CategoryID = cid;
+            cl.DateAdded = new DateTime(2017, 01, 02, 12, 45, 00);
+            cl.Counter = 81;
+            cl.Reported = "";
+            cl.Price = 850.00;
+            cl.State = "Used";
+            cl.CategoryPath = "Music and Education";
+            context.Classifieds.AddOrUpdate(p => p.Name, cl);
+            context.SaveChanges();
+
+
+
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "CORT SFX-E NS Gitara elektroakustyczna").Select(p => p.ClassifiedID).First();
+            lid = context.Locations.Where(p => p.LocationName == "Warszawa, Mokotów").Select(p => p.LocationID).First();
+            cll = new ClassifiedLocation();
+            cll.ClassifiedID = clid;
+            cll.LocationID = lid;
+            context.ClassifiedLocations.AddOrUpdate(p => new { p.LocationID, p.ClassifiedID }, cll);
+            context.SaveChanges();
+
+
+
+
+            ph = new Photo();
+            ph.ClassifiedID = clid;
+            ph.MainPhoto = true;
+            ph.Path = "/Content/photos/gitaracort_main.jpg";
+            context.Photos.AddOrUpdate(p => p.Path, ph);
+            context.SaveChanges();
+
+
+
+
+
+
+
+
+            ///////////////////////////////////////////////////////////////
+            uid = context.Users.Where(p => p.UserName == "wiktor500").Select(p => p.Id).First();
+            cid = context.Categories.Where(p => p.Name == "Personal").Select(p => p.CategoryID).First();
+            cl = new Classified();
+            cl.UserID = uid;
+            cl.Name = "Drzwi lexus is 200 is 300";
+            cl.Description = "Drzwi lexus is 200 is 300. Możliwość wysyłki";
+            cl.CategoryID = cid;
+            cl.DateAdded = new DateTime(2017, 02, 02, 12, 45, 00);
+            cl.Counter = 21;
+            cl.Reported = "";
+            cl.Price = 120;
+            cl.State = "Used";
+            cl.CategoryPath = "Motoring >> Auto parts >> Personal";
+            context.Classifieds.AddOrUpdate(p => p.Name, cl);
+            context.SaveChanges();
+
+
+
+
+
+
+            clid = context.Classifieds.Where(p => p.Name == "Drzwi lexus is 200 is 300").Select(p => p.ClassifiedID).First();
+            lid = context.Locations.Where(p => p.LocationName == "Warszawa, Mokotów").Select(p => p.LocationID).First();
+            cll = new ClassifiedLocation();
+            cll.ClassifiedID = clid;
+            cll.LocationID = lid;
+            context.ClassifiedLocations.AddOrUpdate(p => new { p.LocationID, p.ClassifiedID }, cll);
+            context.SaveChanges();
+
+
+
+
+            ph = new Photo();
+            ph.ClassifiedID = clid;
+            ph.MainPhoto = true;
+            ph.Path = "/Content/photos/drzwi_main.jpg";
             context.Photos.AddOrUpdate(p => p.Path, ph);
             context.SaveChanges();
         }

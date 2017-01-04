@@ -7,8 +7,103 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="Stylesheet" type="text/css" href="~/Content/MyCss.css" />
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Lato" rel="stylesheet">
+
+    <script type="text/javascript">
+
+        function odliczanie() {
+            var dzisiaj = new Date();
+
+
+            var godzina = dzisiaj.getHours();
+            if (godzina < 10) godzina = "0" + godzina;
+
+            var minuta = dzisiaj.getMinutes();
+            if (minuta < 10) minuta = "0" + minuta;
+
+            var sekunda = dzisiaj.getSeconds();
+            if (sekunda < 10) sekunda = "0" + sekunda;
+
+            document.getElementById("zegar").innerHTML = godzina + ":" + minuta + ":" + sekunda;
+
+            setTimeout("odliczanie()", 1000);
+        }
+
+        function podmienWyswietlanePosty() {
+            document.getElementById("wyswietlanePosty").innerHTML = document.getElementById("SearchString").valueOf;
+        }
+
+        function checkAdminMessage() {
+            //alert('ddd');
+            $.post("/Home/isActiceAdminMessage", function (msg) {
+                if (msg != "") {
+                    $(document).ready(
+                        function () {
+                            $('#AdminMessageBody').text(msg);
+                         }
+                    );
+                }
+                else {
+                    (document).ready(
+                        function () {
+                            $('#AdminMessageBody').empty();
+                        }
+                    );
+                    
+                }
+            });
+        }
+
+        function newReportedMs() {
+            //alert("newReportedMS");
+            $.post("/Classifieds/howManyReported", function (ile) {
+                if (ile != -1) {
+                    if (ile == 0) {
+                        document.getElementById("sumOfNewReportedMessages").style.color = "gray";
+                    }
+                    else {
+                        document.getElementById("sumOfNewReportedMessages").style.color = "red";
+                    }
+
+                    //var old = document.getElementById("sumOfNewMessages").innerHTML;
+                    //alert(old);
+
+                    document.getElementById("sumOfNewReportedMessages").innerHTML = "(" + ile + ")";
+                }
+            });
+
+            //setTimeout("newMs()", 3000);
+        }
+
+        function newMs() {
+            //alert("newMS");
+            $.post("/Home/howManyNms", function (ile) {
+                if (ile != -1) {
+                    if (ile == 0) {
+                        document.getElementById("sumOfNewMessages").style.color = "gray";
+                    }
+                    else {
+                        document.getElementById("sumOfNewMessages").style.color = "red";
+                    }
+
+                    //var old = document.getElementById("sumOfNewMessages").innerHTML;
+                    //alert(old);
+
+                    document.getElementById("sumOfNewMessages").innerHTML = "(" + ile + ")";
+                }
+            });
+
+            setTimeout("newMs()", 3000);
+        }
+
+    </script>
+
+
+
 </head>
-<body>
+<body onload="newReportedMs(); newMs(); odliczanie(); checkAdminMessage();">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -17,14 +112,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+                <div class="navbar-brand">
+                    <a href="@Url.Action("Index", "Classifieds")" class="HomeLink">
+                        <span>MyOLX</span>
+                    </a>
+                </div>
+
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

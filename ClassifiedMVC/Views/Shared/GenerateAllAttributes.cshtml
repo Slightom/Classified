@@ -1,0 +1,117 @@
+﻿@model ClassifiedMVC.Models.AllAtributesModel
+
+<hr />
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<div id="fuel" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.fuel, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.DropDownList("fuel", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.fuel, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Engine_power" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Engine_power, "Engine power [KM]",htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-1">
+            @Html.EditorFor(model => model.Engine_power, new { htmlAttributes = new { @class = "form-control" } })
+            
+            @Html.ValidationMessageFor(model => model.Engine_power, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Engine_capacity" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Enginie_capacity, "Engine capacity [cm\xB3]", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-1">
+            @Html.EditorFor(model => model.Enginie_capacity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Enginie_capacity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Body_type" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Body_type, "Body type",htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.DropDownList("Body_type", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Body_type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Transmission" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Transmission, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.DropDownList("Transmission", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Transmission, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Country_of_origin" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Country_of_origin, "Country of origin",htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.DropDownList("Country_of_origin", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Country_of_origin, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Mileage" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Mileage, "Mileage [KM]",htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.Mileage, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Mileage, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Year" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Color" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Color, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.DropDownList("Color", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Number_of_pages" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Number_of_pages, "Number of pages", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.Number_of_pages, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Number_of_pages, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div id="Publication_Year" style="display:none">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Publication_Year, "Publication Year", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.Publication_Year, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Publication_Year, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+

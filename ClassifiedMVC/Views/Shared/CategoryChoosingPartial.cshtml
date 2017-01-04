@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ClassifiedMVC.Models.Category>
+
+
+<div>
+
+    
+
+    <div class="dropdown">
+            @if(ViewBag.cn != null)
+            {
+                <span id="categoryPath0">@ViewBag.cPath</span>
+            }
+            else
+            {
+                <span id="categoryPath0"></span>
+            }
+
+
+        <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#">
+            @if (ViewBag.cn != null)
+            {
+                <span>Change</span>
+            }
+            else
+            {
+                <span>Choose Category</span>
+            } <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu multi-level" role="menu">
+
+            @foreach (var m in Model)
+            {
+                if (ViewBag.Children[m.Name] == null)
+                {
+                    <li><a onclick="@("choosingCategory('"+m.Name+"')")" href="#">@m.Name</a></li>
+                }
+                else
+                {
+                    <li class="dropdown-submenu">
+
+                        <a onclick="@("choosingCategory('"+m.Name+"')")" tabindex="-1" href="#">@m.Name</a>
+                        <ul class="dropdown-menu">
+                            @foreach (var n in ViewBag.Children[m.Name])
+                            {
+                                if (ViewBag.Children[n.Name] == null)
+                                {
+                                    <li><a onclick="@("choosingCategory('"+n.Name+"')")" href="#">@n.Name</a></li>
+                                }
+                                else
+                                {
+                                    <li class="dropdown-submenu">
+
+                                        <a onclick="@("choosingCategory('"+n.Name+"')")" tabindex="-1" href="#">@n.Name</a>
+                                        <ul class="dropdown-menu">
+                                            @foreach (var o in ViewBag.Children[n.Name])
+                                            {
+                                                <li><a onclick="@("choosingCategory('"+o.Name+"')")" href="#">@o.Name</a></li>
+                                            }
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+                    </li>
+                }
+            }
+
+        </ul>
+    </div>
+
+</div>

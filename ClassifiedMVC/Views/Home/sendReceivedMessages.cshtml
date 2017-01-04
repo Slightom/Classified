@@ -1,0 +1,78 @@
+﻿@model IEnumerable<ClassifiedMVC.Models.Message>
+
+<div class="container">
+    <hr />
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#receiver">Received</a></li>
+        <li><a data-toggle="tab" href="#send">Send</a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div id="receiver" class="tab-pane fade in active">
+            <h3>Received Messages</h3>
+            <p>
+                @foreach (var m in Model)
+                {
+                    <div class="message_panel">
+                        <div class="panel-heading">
+                            <div class="media">
+                                <div class="media-body">
+                                    Message from:
+                                    <span class="extraText">
+                                        <a href="@Url.Action("SendMessage", "Home",new { id=m.SenderID})" class="userDetailsLink">
+                                            @m.Sender.UserName
+                                        </a>
+                                    </span> &nbsp&nbsp&nbsp
+
+                                    Date: <span class="extraText">@m.Date</span> &nbsp&nbsp&nbsp
+
+                                    @if (m.Read == false)
+                                    {
+                                        <span style="font-size: 28px; color: red; font-weight: bold;">NEW</span>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-body" style="font-size: 18px;" onclick="update(@m.MessageID)">
+                            @m.Text
+                        </div>
+                    </div>
+                }
+            </p>
+        </div>
+
+        <div id="send" class="tab-pane fade">
+            <h3>Send Messages</h3>
+            <p>
+                @foreach (var m in ViewBag.messagesSend)
+                {
+                    <div class="message_panel">
+                        <div class="panel-heading">
+                            <div class="media">
+                                <div class="media-body">
+                                    <br />
+                                    Messages send to:
+                                    <span class="extraText">
+                                        <a href="@Url.Action("SendMessage", "Home",new { id=m.ReceiverID})" class="userDetailsLink">
+                                            @m.Receiver.UserName
+                                        </a>
+                                    </span> &nbsp&nbsp&nbsp
+
+                                    Date: <span class="extraText">@m.Date</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-body" style="font-size: 18px;">
+                            @m.Text
+                        </div>
+                    </div>
+                }
+            </p>
+        </div>
+
+    </div>
+</div>

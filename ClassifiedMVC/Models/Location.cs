@@ -12,7 +12,7 @@ namespace ClassifiedMVC.Models
         public int LocationID { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string LocationName { get; set; }
 
         public virtual ICollection<PCL> PCLs { get; set; }
         public virtual ICollection<ClassifiedLocation> ClassifiedLocations { get; set; }

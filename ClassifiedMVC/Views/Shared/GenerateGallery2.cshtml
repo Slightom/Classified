@@ -1,0 +1,91 @@
+﻿
+<hr />
+
+<div class="form-group">
+    <div class="control-label col-md-2"> Change Main Photo </div>
+    <div class="col-md-4">
+        <input id="file0" type="file" name="upload0" accept="image/*" />
+    </div>
+    <div class="col-md-6">
+        <img src=@ViewBag.p0 height="100" />
+    </div>
+</div>
+
+
+
+
+<div class="form-group">
+    <div class="control-label col-md-2"> 
+        @if (ViewBag.count > 1)
+        { 
+            <span>Change photo</span> 
+        }
+        else
+        {
+            <span>Add photo</span> 
+        } 
+    </div>
+    <div class="col-md-4">
+        <input id="file1" type="file" name="upload1" accept="image/*" />
+    </div>
+    @if (ViewBag.count > 1)
+    {
+        <div class="col-md-6">
+            <img src=@ViewBag.p1 height="100" />
+        </div>
+    }
+
+</div>
+
+
+
+
+<div class="form-group">
+    <div class="control-label col-md-2"> 
+        @if (ViewBag.count> 2)
+        {
+            <span>Change photo</span>
+        }
+        else
+        {
+            <span>Add photo</span>
+        } 
+    </div>
+    <div class="col-md-4">
+        <input id="file2" type="file" name="upload2" accept="image/*" />
+    </div>
+    @if (ViewBag.count > 2)
+    {
+        <div class="col-md-6">
+            <img src=@ViewBag.p2 height="100" />
+        </div>
+    }
+</div>
+
+
+
+
+<div class="form-group">
+    <div class="control-label col-md-2">
+        @if (ViewBag.count > 3)
+        {
+            <span>Change photo</span>
+        }
+        else
+        {
+            <span>Add photo</span>
+        } 
+    </div>
+    <div class="col-md-4">
+        <input id="file3" type="file" name="upload3" accept="image/*" />
+    </div>
+    @if (ViewBag.count > 3)
+    {
+        <div class="col-md-6">
+            <img src=@ViewBag.p3 height="100" />
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

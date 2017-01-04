@@ -19,6 +19,7 @@ namespace ClassifiedMVC.Models
             return userIdentity;
         }
 
+        public int Pagination { get; set; }
 
         public virtual ICollection<Message> MessagesSent { get; set; }
         public virtual ICollection<Message> MessagesReceived { get; set; }

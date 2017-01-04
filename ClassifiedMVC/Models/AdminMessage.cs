@@ -19,5 +19,7 @@ namespace ClassifiedMVC.Models
 
         [Required]
         public DateTime Date { get; set; }
+
+        public bool Active { get; set; }
     }
 }

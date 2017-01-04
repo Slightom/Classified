@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "MyMessages";
+}
+
+<script type="text/javascript">
+
+    function update(x)
+    {
+        $(document).ready(function () {
+            // zamiana pola read
+            $.post("/Home/readBefore", { id: x }, function (readBefore) {
+                if (readBefore == "false") {
+                   // alert("changes");
+                    $.ajax({
+                        url: "/Home/sendReceivedMessages",
+                        type: "GET"
+                    })
+                    .done(function (partialViewResult) {
+                        $("#messagesBox").html(partialViewResult);
+                    });
+
+                }
+                else {
+                   // alert("Bez zmian");
+                }
+
+            });
+
+
+        });
+    }
+
+
+</script>
+
+
+<h2>My Messages</h2>
+
+<div id="messagesBox">
+    @Html.Action("sendReceivedMessages")
+</div>
+
+
+
+

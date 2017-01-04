@@ -37,6 +37,11 @@ namespace ClassifiedMVC.Models
 
         public string Reported { get; set; } // if nobody reported string is null
 
+
+
+        public string CategoryPath { get; set; }
+
+
         public virtual User User { get; set; }
         public virtual Category Category { get; set; }
         public virtual ICollection<ClassifiedLocation> ClassifiedLocations { get; set; }

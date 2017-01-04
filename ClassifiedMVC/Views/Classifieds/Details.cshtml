@@ -4,87 +4,255 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>Classified</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Name)
-        </dt>
+<div class="container">
+    <div class="col-lg-2"></div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
+    <div class="col-lg-8">
+        <div class="main_panel">
+            <div>
+                <h4 style="text-align:center">@Model.CategoryPath &nbsp&nbsp&nbsp  @Model.ClassifiedLocations.ElementAt(0).Location.LocationName</h4>
+                <hr />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+                <div id="MainMiniImage" style="text-align:center;">
+                    <img data-target="#Gallerymodal" data-toggle="modal" height="260" style="border: 3px solid grey" src=@Model.Photos.ElementAt(0).Path />
+                </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                <p class="ClassifiedNameText" style="font-size:26px; text-align:center; padding-top:15px;"> @Model.Name</p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                <div class="modal" id="Gallerymodal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                        <div class="modal-body">
+                            <div id="Gallery" style="text-align:center">
+                                <img id="mainImage" height="500" style="border: 3px solid grey" src=@Model.Photos.ElementAt(0).Path />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
+                                <br />
 
-        <dd>
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
+                                <div id="divContainer">
+                                    @foreach (var p in Model.Photos)
+                                    {
+                                        <img src=@p.Path class="GalleryImagesMini" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
+                    </div>
+                </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
+                <hr />
+                <dl class="dl-horizontal">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.State)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DateAdded)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DateAdded)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Counter)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Counter)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Reported)
-        </dt>
+                    <dt>
+                        @Html.Label("Added By")
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.UserName)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Reported)
-        </dd>
 
-    </dl>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+
+
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Price) zł
+                    </dd>
+
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.State)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.State)
+                    </dd>
+
+
+                    <dt>
+                        @Html.Label("Views")
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Counter)
+                    </dd>
+
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <dt>
+                            @Html.Label("Reported")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Reported)
+                        </dd>
+                    }
+
+                </dl>
+                <hr />
+
+                <dl class="dl-horizontal">
+
+                    @foreach (var a in Model.ClassifiedAttributes)
+                    {
+
+                        <dt>
+                            @Html.Label(a.Attribute.Name)
+                        </dt>
+                        <dd>
+                            @a.Value
+                            @if (a.Attribute.Name == "Engine power")
+                            { <span> KM</span> }
+                            @if (a.Attribute.Name == "Engine capacity")
+                            { <span> cm<sup>3</sup></span> }
+                            @if (a.Attribute.Name == "Mileage")
+                            { <span> Km</span> }
+
+                        </dd>
+                    }
+
+                </dl>
+
+                @if (Model.UserID.Equals(ViewBag.UserId) || User.IsInRole("Admin"))
+                {
+                    <hr />
+                    <input type="button" value="Edit" class="btn btn-warning" onclick="location.href='@Url.Action("Edit", "Classifieds", new { id = Model.ClassifiedID })'" />
+                    <input type="button" value="Delete" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Classifieds", new { id = Model.ClassifiedID })'" />
+                    <input type="button" value="Clear Views" class="btn btn-info" onclick="location.href='@Url.Action("ClearViews", "Classifieds", new { id = Model.ClassifiedID })'" />
+                }
+                else
+                {
+
+                    <button class="btn-danger" onclick="showPopup()">Report Abuse</button>
+                    @*<input data-target="#ReportAbuse" data-toggle="modal" type="button" value="Report Abuse" class="btn btn-danger"/>*@
+                }
+            </div>
+
+
+            <div id="ReportAbuse" class="modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-body">
+                        <input id="specialClassifiedID" value=@Model.ClassifiedID style="display:none" />
+
+                        <br /><br /><br /><br />
+
+                        <div class="form-group">
+                            <div class="col-lg-4" style="text-align:right;">@Html.Label("Reason for moderate")</div>
+                            <div class="col-md-8">
+                                @Html.TextArea("reportedText", null, 10, 40, null)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-lg-4" style="text-align:right;"></div>
+                            <div class="col-md-8">
+                                <button class="btn-success" onclick="report()">Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <p>
+                <br />
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-2"></div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ClassifiedID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+
+
+    function showPopup()
+    {
+        var cid = $('#specialClassifiedID').val();
+
+        $.post("/Classifieds/ReportedBefore", { id: cid}, function (p) {
+            if(p=="false")
+            {
+                $('#ReportAbuse').modal('show');
+            }
+            else
+            {
+                alert('Classified had been reported before!');
+            }
+        });
+        
+    }
+
+    function report() {
+        //alert('jestem');
+        var cid = $('#specialClassifiedID').val();
+        //alert(cid);
+        var rt = $('#reportedText').val();
+        //alert(rt);
+
+        $.post("/Classifieds/ReportAbused", { id: cid, reportedtext: rt }, function (p) {
+            
+            $('#ReportAbuse').hide("slow", function () {
+                alert(p);
+            });
+
+            $('#ReportAbuse').modal('hide');
+
+        });
+    }
+
+    $(document).ready(function () {
+        $('#divContainer img').on({
+            mouseover: function () {
+                $(this).css({
+                    'cursos': 'pointer',
+                    'border-Color': 'red'
+                });
+            },
+            mouseout: function () {
+                $(this).css({
+                    'cursos': 'default',
+                    'border-Color': 'grey'
+                });
+            },
+            click: function () {
+                var imageUrl = $(this).attr('src');
+                $('#mainImage').fadeOut(300, function () {
+                    $(this).attr('src', imageUrl);
+                }).fadeIn(300);
+            }
+        });
+    });
+
+
+
+
+</script>
