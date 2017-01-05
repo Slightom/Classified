@@ -38,6 +38,7 @@
             <input type="button" value="Edit Profil" class="btn btn-warning" onclick="location.href='@Url.Action("EditForUser", "Users", new { id = Model.Id })'" />
             <input type="button" value="My Messages" class="btn btn-success" onclick="location.href='@Url.Action("MyMessages", "Home")'" />
             <input type="button" value="My Classified" class="btn btn-info" onclick="location.href='@Url.Action("Index", "Classifieds", new { myClassified=true })'" />
+            <input type="button" value="My Favourite Categories" class="btn btn-primary" onclick="location.href='@Url.Action("MyCategories", "Home")'" />
         </dd>
     </dl>
 </div>

@@ -98,18 +98,42 @@
             <div id="zegar" style="font-size: 40px;text-align: center;">
             </div>
 
-            <div class="main_panel">
 
-                @using (Html.BeginForm("Index", "Classifieds", FormMethod.Get))
-                {
-                    <div style="text-align:center">
+
+            @using (Html.BeginForm("Index", "Classifieds", FormMethod.Get))
+            {
+                <div class="answer_panel">
+
+                    <div style="text-align:center; padding: 15px 15px;">
                         <span style="color: black;">@Html.TextBox("SearchString")</span>
-                        <input type="submit" value="Search" class="mySubmitButton">
-                    </div>
-                }
-            </div>
 
-            <div id="AdminMessage" style="text-align:center; " >
+                        <input type="submit" value="Search" class="mySubmitButton" />
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 0px">
+                    <div id="moreOptions" class="d1">
+                        <span style="font-size:10px;">More Options</span>
+                        <span style="font-size:10px;" class="glyphicon glyphicon-chevron-down"></span>
+                    </div>
+
+
+
+
+
+                    <div id="SearchModelDiv" class="asd"   style="display:@ViewBag.Filters">
+                        @Html.Action("GenerateSearchModel", "Classifieds", new { model = ViewBag.SM })
+                    </div>
+                </div>
+
+            }
+
+
+
+
+
+            <div id="AdminMessage" style="text-align:center; ">
                 <div class="post_panel">
                     <div class="panel-heading">
                         Message from Admins
@@ -127,7 +151,15 @@
     </div>
 </div>
 
+<script type="text/javascript">
 
+    $(document).ready(function () {
+        $("#moreOptions").click(function () {
+            $(this).next('.asd').slideToggle("slow");
+        });
+    });
+
+</script>
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = Request.QueryString["searchString"] }),
 

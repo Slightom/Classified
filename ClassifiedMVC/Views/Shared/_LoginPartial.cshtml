@@ -20,23 +20,42 @@
             </a>
 
         </li>
-        <li>
             @if (User.IsInRole("Admin"))
             {
+                <li>
+                    <a href="@Url.Action("SendEmail", "Home")" class="MyProfileLink">
+                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                        <span>Send Newsletter</span>
+                    </a>
+                </li>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>Manage<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Index", "BannedWords")">BannedWords</a></li>
+                        <li><a href="@Url.Action("Index", "Users")">Users</a></li>
+                        <li><a href="@Url.Action("Index", "AdminMessages")">AdminMessages</a></li>
+                    </ul>
+                </li>
+
                 int id2 = ClassifiedMVC.Controllers.ClassifiedsController.howManyReported();
-                <a href="@Url.Action("Index", "Classifieds", new { ReportedOnly = true })" class="MyProfileLink">
-                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                    @if (id2 == 0)
-                    {
-                        <span id="sumOfNewReportedMessages" style="color:gray">(0)</span>
-                    }
-                    else
-                    {
-                        <span id="sumOfNewReportedMessages" style="color:red">(@id2)</span>
-                    }
-                </a>
+                <li>
+                    <a href="@Url.Action("Index", "Classifieds", new { ReportedOnly = true })" class="MyProfileLink">
+                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                        @if (id2 == 0)
+                        {
+                            <span id="sumOfNewReportedMessages" style="color:gray">(0)</span>
+                        }
+                        else
+                        {
+                            <span id="sumOfNewReportedMessages" style="color:red">(@id2)</span>
+                        }
+                    </a>
+                </li>
             }
-        </li>
+
         <li>
             @{
                 int id = ClassifiedMVC.Controllers.HomeController.howManyNms2(User.Identity.GetUserId());

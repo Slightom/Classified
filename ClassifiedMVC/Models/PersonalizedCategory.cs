@@ -21,6 +21,8 @@ namespace ClassifiedMVC.Models
         public double PriceMax { get; set; }
         public string State { get; set; }
 
+        public string Path { get; set; }
+
         
 
 

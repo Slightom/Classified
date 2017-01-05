@@ -824,6 +824,7 @@
             pc.PriceMin = 5000;
             pc.PriceMax = 10000;
             pc.CategoryID = cid;
+            pc.Path = "Motoring >> Cars";
             context.PersonalizedCategories.AddOrUpdate(p => new { p.UserID, p.CategoryID }, pc);
             context.SaveChanges();
 

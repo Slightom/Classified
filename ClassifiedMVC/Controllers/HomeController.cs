@@ -2,10 +2,10 @@
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Web;
-using System.Web.Helpers;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace ClassifiedMVC.Controllers
@@ -20,22 +20,91 @@ namespace ClassifiedMVC.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
-        public ActionResult About()
+        [Authorize(Roles ="Admin")]
+        [HttpGet]
+        public ActionResult SendEmail()
         {
-            ViewBag.Message = "Your application description page.";
+            var users = db.Users.ToList();
+            MailMessage mailMessage;
 
-            return View();
+            DateTime date = DateTime.Now;
+            date = date.AddDays(-5);
+            List<Classified>  classifieds = db.Classifieds.Where(p => p.DateAdded >= date).ToList(); // ogłoszenia z ostatnich 5 dni
+            List<Classified> BEST = null;
+
+            foreach(var u in users)
+            {
+                bool favouriteExists = db.PersonalizedCategories.Any(p => p.UserID == u.Id);
+                if (favouriteExists) // jesli user ma ulubione kategorie
+                {
+                    BEST = new List<Classified>();
+                    var pcs = db.PersonalizedCategories.Where(p => p.UserID == u.Id).ToList();
+                    foreach (var pc in pcs) // dla kazdej ulubionej kategorii
+                    {
+                        List<Classified> csallgood = classifieds.Where(p => p.CategoryPath.Contains(pc.Category.Name)).ToList(); // wszystkie z drzewa pasujace
+                        if(csallgood != null)
+                        {
+                            foreach(var c in csallgood) // dla kazdego pasujacego sprawdz warunki
+                            {
+                                if(c.Price >= pc.PriceMin && c.Price <= pc.PriceMax)
+                                {
+                                    if(pc.State != "----") // jeżeli ma znaczenie stan
+                                    {
+                                        if(c.State != pc.State) { break; }
+                                    }
+
+                                    PCL pcl = db.PCLs.Where(p => p.PersonalizedCategoryID == pc.PersonalizedCategoryID).First();
+                                    if(pcl != null) // jeśli ma znaczenie lokalizacja
+                                    {
+                                        ClassifiedLocation cl = db.ClassifiedLocations.Where(p => p.ClassifiedID == c.ClassifiedID).First();
+                                        if(!cl.Location.LocationName.Contains(pcl.Location.LocationName))
+                                        {
+                                            break;
+                                        }
+                                    }
+
+                                    BEST.Add(c);
+                                }
+
+                            }
+                        }
+
+                        // + location
+                    }
+
+                }
+                
+                if(BEST != null) // jeśli są odpowiednie ogloszenia
+                {
+                    mailMessage = new MailMessage("myoadm_myolx@o2.pl", u.Email);
+                    mailMessage.Subject = "New Classified!(" + BEST.Count() + ")";
+                    string s="";
+                    int i = 1;
+                    foreach(var b in BEST)
+                    {
+                        s = string.Concat(s, i++ + ") " + b.Name + "\n\n");
+                    }
+                    mailMessage.Body = s;
+                    mailMessage.IsBodyHtml = false;
+
+                    using (SmtpClient smtp = new SmtpClient())
+                    {
+                        smtp.Host = "poczta.o2.pl";
+                        smtp.EnableSsl = true;
+                        NetworkCredential NetworkCred = new NetworkCredential("myoadm_myolx@o2.pl", "myolxadmin");
+                        smtp.UseDefaultCredentials = true;
+                        smtp.Credentials = NetworkCred;
+                        smtp.Port = 587;
+                        smtp.Send(mailMessage);
+                    }
+                }
+            }          
+           
+
+            return RedirectToAction("Index", "Classifieds");
         }
 
-
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+            
 
 
         public PartialViewResult CategoryChoosingPartial(int? id)
@@ -397,6 +466,16 @@ namespace ClassifiedMVC.Controllers
             ViewBag.ReceiverID = new SelectList(db.Users, "UserID", "Nick", message.ReceiverID);
             ViewBag.SenderID = new SelectList(db.Users, "UserID", "Nick", message.SenderID);
             return View(message);
+        }
+
+
+        [Authorize(Roles = "User")]
+        public ActionResult MyCategories()
+        {
+            string uid = User.Identity.GetUserId();
+            var pc = db.PersonalizedCategories.Where(p => p.UserID == uid).ToList();
+
+            return View(pc);
         }
     }
 }

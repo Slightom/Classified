@@ -25,12 +25,15 @@ namespace ClassifiedMVC.Models
         public int Publication_Year { get; set; }
     }
 
-    public class UploadModel
+    public class SearchModel
     {
-
-        public int UploadModelID { get; set; }
-
-        [DataType(DataType.Upload)]
-        HttpPostedFileBase upload { get; set; }
+        public int SearchModelID { get; set; }
+        public int CategoryID { get; set; }
+        public string Location { get; set; }
+        public string State { get; set; }
+        public double PriceMin { get; set; }
+        public double PriceMax { get; set; }
+        
+        
     }
 }

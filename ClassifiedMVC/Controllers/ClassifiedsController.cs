@@ -17,7 +17,94 @@ namespace ClassifiedMVC.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(string searchString, int? page, bool? myClassified, bool? ReportedOnly)
+        public ActionResult GenerateSearchModel(SearchModel model)
+        {
+            IEnumerable<SelectListItem> lss0;
+            List<SelectListItem> ls0 = new List<SelectListItem>();
+
+            var lsx0 = db.Categories.ToList();
+
+            ls0.Add(new SelectListItem() { Text = "----", Value = "0" });
+            foreach (var l in lsx0)
+            {
+                ls0.Add(new SelectListItem() { Text = l.Name, Value = l.CategoryID.ToString() });
+            }
+
+
+
+            lss0 = ls0;
+
+            ViewBag.CategoryID = new SelectList(lss0, "Text", "Text", "----");
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            IEnumerable<SelectListItem> lss;
+            List<SelectListItem> ls = new List<SelectListItem>
+                {
+                    new SelectListItem() { Text = "----", Value = "3", Selected = true },
+                    new SelectListItem() { Text = "New", Value = "1"},
+                    new SelectListItem() { Text = "Used", Value = "2"}
+                };
+            lss = ls;
+            ViewBag.State = new SelectList(lss, "Text", "Text");
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+            IEnumerable<SelectListItem> lss2;
+            List<SelectListItem> ls2 = new List<SelectListItem>();
+
+            var lsx = db.Locations.ToList();
+
+            ls2.Add(new SelectListItem() { Text = "----", Value = "----" });
+            foreach (var l in lsx)
+            {
+                ls2.Add(new SelectListItem() { Text = l.LocationName, Value = l.LocationName });
+            }
+
+
+
+            lss2 = ls2;
+
+            ViewBag.Location = new SelectList(lss2, "Text", "Text", "----");
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            SearchModel sm = new SearchModel();
+            if (model != null)
+            {
+                if(model.Location!=null)
+                {
+                    ViewBag.Location = new SelectList(lss2, "Text", "Text", model.Location);
+                }
+                else
+                {
+                    ViewBag.Location = new SelectList(lss2, "Text", "Text", "----");
+                }
+
+                ViewBag.State = new SelectList(lss, "Text", "Text", model.State);
+                if(model.CategoryID!=0)
+                {
+                    Category c = db.Categories.Find(model.CategoryID);
+                    ViewBag.CategoryID = new SelectList(lss0, "Text", "Text", c.Name);
+                }
+                else
+                {
+                    ViewBag.CategoryID = new SelectList(lss0, "Text", "Text", "----");
+                }
+                sm.PriceMin = model.PriceMin;
+                sm.PriceMax = model.PriceMax;
+            }
+
+            else
+            {
+                sm.CategoryID = 0;
+                sm.PriceMax = 1000000;
+            }
+            
+
+            return View(sm);
+        }
+        public ActionResult Index(string searchString, int? page, bool? myClassified, bool? ReportedOnly, SearchModel sm)
         {
             var classifieds = db.Classifieds.Include(c => c.Category).Include(c => c.User);
 
@@ -31,7 +118,7 @@ namespace ClassifiedMVC.Controllers
             {
                 //ViewBag.searchString = "myClassified";
                 string uid = User.Identity.GetUserId();
-                classifieds = classifieds.Where(p => p.UserID==uid);
+                classifieds = classifieds.Where(p => p.UserID == uid);
             }
 
             if (ReportedOnly != null) // jeśli jest Reported Only
@@ -39,6 +126,46 @@ namespace ClassifiedMVC.Controllers
                 //ViewBag.searchString = "myClassified";
                 classifieds = classifieds.Where(p => p.Reported != null && p.Reported != "");
             }
+
+
+            if (searchString != null)
+            {
+                ViewBag.Filters = "unset;";
+                classifieds = classifieds.Where(p => p.Price >= sm.PriceMin && p.Price <= sm.PriceMax);
+                if (sm.CategoryID != 0)
+                {
+                    Category c = db.Categories.Find(sm.CategoryID);
+                    classifieds = classifieds.Where(p => p.CategoryPath.Contains(c.Name));
+                }
+
+                if (sm.State != "----")
+                {
+                    classifieds = classifieds.Where(p => p.State == sm.State);
+                }
+
+                if (sm.Location != "----")
+                {
+                    List<Classified> allgood = new List<Classified>();
+                    ApplicationDbContext db22 = new ApplicationDbContext();
+                    foreach (var c in classifieds)
+                    {
+                        ClassifiedLocation cl = db22.ClassifiedLocations.Where(p => p.ClassifiedID == c.ClassifiedID).First();
+                        if (cl.Location.LocationName.Contains(sm.Location))
+                        {
+                            allgood.Add(c);
+                        }
+                    }
+
+                    classifieds = allgood.AsQueryable();
+                }
+
+                ViewBag.SM = sm;
+            }
+
+            else { ViewBag.Filters = "none;"; }
+
+
+
 
             classifieds = classifieds.OrderByDescending(p => p.DateAdded);
 
@@ -61,7 +188,7 @@ namespace ClassifiedMVC.Controllers
             int userPagination = -1;
             string uid2 = User.Identity.GetUserId();
             User u = db.Users.Find(uid2);
-            if(u != null && u.Pagination > 0)
+            if (u != null && u.Pagination > 0)
             {
                 userPagination = u.Pagination;
             }
@@ -69,6 +196,7 @@ namespace ClassifiedMVC.Controllers
             {
                 userPagination = 5;
             }
+
 
             return View(classifieds.ToList().ToPagedList(page ?? 1, userPagination));
         }
@@ -109,9 +237,6 @@ namespace ClassifiedMVC.Controllers
             Classified c = new Classified();
             c.CategoryID = 0;
             c.CategoryPath = "";
-            c.Name = "test";
-            c.Description = "test";
-            c.Price = 22;
             ViewBag.CategoryID = new SelectList(db.Categories.Where(p => p.CategoryFatherID == null), "CategoryID", "Name");
             ViewBag.UserID = new SelectList(db.Users, "Id", "UserName");
             IEnumerable<SelectListItem> lss;
@@ -333,7 +458,7 @@ namespace ClassifiedMVC.Controllers
             IEnumerable<SelectListItem> lss;
             List<SelectListItem> ls = new List<SelectListItem>
                 {
-                    new SelectListItem() { Text = "New", Value = "1", Selected = true },
+                    new SelectListItem() { Text = "New", Value = "1"},
                     new SelectListItem() { Text = "Used", Value = "2" }
                 };
             lss = ls;
@@ -384,7 +509,7 @@ namespace ClassifiedMVC.Controllers
                     var photoName = old.Path;
                     string fullPath = Request.MapPath(photoName);
 
-                    if(!old.Path.Equals("default.jpg"))
+                    if (!old.Path.Equals("default.jpg"))
                     {
                         System.IO.File.Delete(fullPath);
 
@@ -422,18 +547,18 @@ namespace ClassifiedMVC.Controllers
 
                         db.SaveChanges();
                     }
-                    
+
                 }
                 else
                 {
-                   
+
                 }
 
                 if (upload1 != null)
                 {
                     //remove old
                     var old = findOld(classified.ClassifiedID, "upload1");
-                    if(old != null)
+                    if (old != null)
                     {
                         var photoName = old.Path;
                         string fullPath = Request.MapPath(photoName);
@@ -565,7 +690,7 @@ namespace ClassifiedMVC.Controllers
 
                     db.ClassifiedAttributes.Add(ca);
                     db.SaveChanges();
-                    
+
                 }
                 return RedirectToAction("Index");
             }
@@ -587,7 +712,7 @@ namespace ClassifiedMVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            
+
 
 
             Classified classified = db.Classifieds.Find(id);
@@ -621,13 +746,13 @@ namespace ClassifiedMVC.Controllers
 
                 if (System.IO.File.Exists(fullPath))
                 {
-                    if(!photoName.Equals("/Content/photos/default.jpg"))
+                    if (!photoName.Equals("/Content/photos/default.jpg"))
                     {
                         System.IO.File.Delete(fullPath);
                     }
                 }
             }
-            
+
 
             db.Classifieds.Remove(classified);
             db.SaveChanges();
@@ -736,6 +861,7 @@ namespace ClassifiedMVC.Controllers
             return PartialView("GenerateLocations");
         }
 
+
         public PartialViewResult GenerateGallery2(int id)
         {
             Classified c = db.Classifieds.Find(id);
@@ -743,7 +869,7 @@ namespace ClassifiedMVC.Controllers
             int x = c.Photos.Count();
             ViewBag.count = x;
 
-            if(x>0) { ViewBag.p0 = c.Photos.ElementAt(0).Path; }
+            if (x > 0) { ViewBag.p0 = c.Photos.ElementAt(0).Path; }
             if (x > 1) { ViewBag.p1 = c.Photos.ElementAt(1).Path; }
             if (x > 2) { ViewBag.p2 = c.Photos.ElementAt(2).Path; }
             if (x > 3) { ViewBag.p3 = c.Photos.ElementAt(3).Path; }
@@ -754,8 +880,8 @@ namespace ClassifiedMVC.Controllers
 
         public Photo findOld(int id, string x)
         {
-            
-            if(db.Classifieds.Find(id) == null)
+
+            if (db.Classifieds.Find(id) == null)
             {
                 return null;
             }
@@ -764,7 +890,7 @@ namespace ClassifiedMVC.Controllers
             List<Photo> photos = db.Photos.Where(a => a.ClassifiedID == id).ToList();
             foreach (var p in photos)
             {
-                if(p.Path.Contains(x))
+                if (p.Path.Contains(x))
                 {
                     return p;
                 }
@@ -779,7 +905,7 @@ namespace ClassifiedMVC.Controllers
         {
             Classified c = db.Classifieds.Find(id);
 
-            if(c.Reported==null || c.Reported.Equals(""))
+            if (c.Reported == null || c.Reported.Equals(""))
             {
                 c.Reported = reportedText;
                 db.SaveChanges();
@@ -811,9 +937,9 @@ namespace ClassifiedMVC.Controllers
             var cs = db2.Classifieds.ToList();
             int ile = 0;
 
-            foreach(var c in cs)
+            foreach (var c in cs)
             {
-                if(c.Reported != null && c.Reported != "")
+                if (c.Reported != null && c.Reported != "")
                 {
                     ile++;
                 }

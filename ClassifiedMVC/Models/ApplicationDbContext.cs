@@ -65,6 +65,6 @@ namespace ClassifiedMVC.Models
         }
 
         public System.Data.Entity.DbSet<ClassifiedMVC.Models.AllAtributesModel> AllAtributesModels { get; set; }
-        public System.Data.Entity.DbSet<ClassifiedMVC.Models.UploadModel> UploadModels { get; set; }
+        public System.Data.Entity.DbSet<ClassifiedMVC.Models.SearchModel> SearchModels { get; set; }
     }
 }

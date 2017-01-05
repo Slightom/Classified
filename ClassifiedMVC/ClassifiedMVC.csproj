@@ -394,10 +394,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminMessagesController.cs" />
+    <Compile Include="Controllers\BannedWordsController.cs" />
     <Compile Include="Controllers\ClassifiedsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Controllers\PersonalizedCategoriesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -450,6 +452,14 @@
     <Compile Include="Migrations\201701031857355_add pagination to user.Designer.cs">
       <DependentUpon>201701031857355_add pagination to user.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701050753407_added path to personalizedc.cs" />
+    <Compile Include="Migrations\201701050753407_added path to personalizedc.Designer.cs">
+      <DependentUpon>201701050753407_added path to personalizedc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701051908393_searchingModel.cs" />
+    <Compile Include="Migrations\201701051908393_searchingModel.Designer.cs">
+      <DependentUpon>201701051908393_searchingModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminMessage.cs" />
@@ -462,6 +472,7 @@
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ClassifiedAttribute.cs" />
     <Compile Include="Models\ClassifiedLocation.cs" />
+    <Compile Include="Models\EmailManager.cs" />
     <Compile Include="Models\HelpfulModels.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Message.cs" />
@@ -796,6 +807,18 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\EditForUser.cshtml" />
     <Content Include="Views\Home\MyProfile.cshtml" />
+    <Content Include="Views\BannedWords\Create.cshtml" />
+    <Content Include="Views\BannedWords\Delete.cshtml" />
+    <Content Include="Views\BannedWords\Details.cshtml" />
+    <Content Include="Views\BannedWords\Edit.cshtml" />
+    <Content Include="Views\BannedWords\Index.cshtml" />
+    <Content Include="Views\Home\MyCategories.cshtml" />
+    <Content Include="Views\PersonalizedCategories\Create.cshtml" />
+    <Content Include="Views\PersonalizedCategories\Delete.cshtml" />
+    <Content Include="Views\PersonalizedCategories\Details.cshtml" />
+    <Content Include="Views\PersonalizedCategories\Edit.cshtml" />
+    <Content Include="Views\PersonalizedCategories\Index.cshtml" />
+    <Content Include="Views\Shared\GenerateSearchModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -992,6 +1015,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701031857355_add pagination to user.resx">
       <DependentUpon>201701031857355_add pagination to user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701050753407_added path to personalizedc.resx">
+      <DependentUpon>201701050753407_added path to personalizedc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701051908393_searchingModel.resx">
+      <DependentUpon>201701051908393_searchingModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
