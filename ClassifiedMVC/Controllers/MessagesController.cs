@@ -7,14 +7,17 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ClassifiedMVC.Models;
+using Microsoft.AspNet.Identity;
 
 namespace ClassifiedMVC.Controllers
 {
+    [Authorize(Roles ="User")]
     public class MessagesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Messages
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var messages = db.Messages.Include(m => m.Receiver).Include(m => m.Sender);
@@ -22,6 +25,7 @@ namespace ClassifiedMVC.Controllers
         }
 
         // GET: Messages/Details/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,11 +41,18 @@ namespace ClassifiedMVC.Controllers
         }
 
         // GET: Messages/Create
-        public ActionResult Create()
+        public ActionResult Create(string rid)
         {
-            ViewBag.ReceiverID = new SelectList(db.Users, "Id", "Email");
-            ViewBag.SenderID = new SelectList(db.Users, "Id", "Email");
-            return View();
+            Message m = new Message();
+            if (rid != null)
+            {             
+                m.ReceiverID = rid;
+                m.Receiver = db.Users.Find(rid);
+                m.SenderID = User.Identity.GetUserId();
+            }
+            //ViewBag.ReceiverID = new SelectList(db.Users, "Id", "Email");
+            //ViewBag.SenderID = new SelectList(db.Users, "Id", "Email");
+            return View(m);
         }
 
         // POST: Messages/Create
@@ -51,11 +62,14 @@ namespace ClassifiedMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MessageID,SenderID,ReceiverID,Text,Date,Read")] Message message)
         {
+            message.Date = DateTime.Now;
+            message.Read = false;
             if (ModelState.IsValid)
             {
                 db.Messages.Add(message);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Index", "Classifieds");
             }
 
             ViewBag.ReceiverID = new SelectList(db.Users, "Id", "Email", message.ReceiverID);
@@ -64,6 +78,7 @@ namespace ClassifiedMVC.Controllers
         }
 
         // GET: Messages/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -99,6 +114,7 @@ namespace ClassifiedMVC.Controllers
         }
 
         // GET: Messages/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

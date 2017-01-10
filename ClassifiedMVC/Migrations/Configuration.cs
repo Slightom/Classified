@@ -824,6 +824,7 @@
             pc.PriceMin = 5000;
             pc.PriceMax = 10000;
             pc.CategoryID = cid;
+            pc.State = "----";
             pc.Path = "Motoring >> Cars";
             context.PersonalizedCategories.AddOrUpdate(p => new { p.UserID, p.CategoryID }, pc);
             context.SaveChanges();
@@ -1118,7 +1119,7 @@
             cl.Name = "Drzwi lexus is 200 is 300";
             cl.Description = "Drzwi lexus is 200 is 300. Możliwość wysyłki";
             cl.CategoryID = cid;
-            cl.DateAdded = new DateTime(2017, 02, 02, 12, 45, 00);
+            cl.DateAdded = new DateTime(2017, 01, 07, 12, 45, 00);
             cl.Counter = 21;
             cl.Reported = "";
             cl.Price = 120;

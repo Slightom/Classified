@@ -85,11 +85,11 @@ namespace ClassifiedMVC.Controllers
                 if(model.CategoryID!=0)
                 {
                     Category c = db.Categories.Find(model.CategoryID);
-                    ViewBag.CategoryID = new SelectList(lss0, "Text", "Text", c.Name);
+                    ViewBag.CategoryID = new SelectList(lss0, "Value", "Text", c.CategoryID.ToString());
                 }
                 else
                 {
-                    ViewBag.CategoryID = new SelectList(lss0, "Text", "Text", "----");
+                    ViewBag.CategoryID = new SelectList(lss0, "Value", "Text", "----");
                 }
                 sm.PriceMin = model.PriceMin;
                 sm.PriceMax = model.PriceMax;
@@ -104,6 +104,11 @@ namespace ClassifiedMVC.Controllers
 
             return View(sm);
         }
+
+
+
+
+
         public ActionResult Index(string searchString, int? page, bool? myClassified, bool? ReportedOnly, SearchModel sm)
         {
             var classifieds = db.Classifieds.Include(c => c.Category).Include(c => c.User);

@@ -142,6 +142,7 @@
                 {
 
                     <button class="btn-danger" onclick="showPopup()">Report Abuse</button>
+                    <button class="btn-success" onclick="location.href='@Url.Action("Create", "Messages",new { rid = Model.UserID })'">Write Message</button>
                     @*<input data-target="#ReportAbuse" data-toggle="modal" type="button" value="Report Abuse" class="btn btn-danger"/>*@
                 }
             </div>

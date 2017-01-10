@@ -395,6 +395,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminMessagesController.cs" />
     <Compile Include="Controllers\BannedWordsController.cs" />
+    <Compile Include="Controllers\CategoryAttributesController.cs" />
     <Compile Include="Controllers\ClassifiedsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -819,6 +820,11 @@
     <Content Include="Views\PersonalizedCategories\Edit.cshtml" />
     <Content Include="Views\PersonalizedCategories\Index.cshtml" />
     <Content Include="Views\Shared\GenerateSearchModel.cshtml" />
+    <Content Include="Views\CategoryAttributes\Create.cshtml" />
+    <Content Include="Views\CategoryAttributes\Delete.cshtml" />
+    <Content Include="Views\CategoryAttributes\Details.cshtml" />
+    <Content Include="Views\CategoryAttributes\Edit.cshtml" />
+    <Content Include="Views\CategoryAttributes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

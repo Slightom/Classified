@@ -3,31 +3,34 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <a href="@Url.Action("Create", "Classifieds")" class="addClassifiedLink">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <span> Add Classified</span>
-            </a>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="@Url.Action("Create", "Classifieds")" class="addClassifiedLink">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    <span> Add Classified</span>
+                </a>
 
-        </li>
-        <li>
-            <a href="@Url.Action("MyProfile", "Home")" class="MyProfileLink">
-                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                <span>My Profile</span>
-            </a>
+            </li>
+            <li>
+                <a href="@Url.Action("MyProfile", "Home")" class="MyProfileLink">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                    <span>My Profile</span>
+                </a>
 
-        </li>
+            </li>
             @if (User.IsInRole("Admin"))
             {
+
+
                 <li>
                     <a href="@Url.Action("SendEmail", "Home")" class="MyProfileLink">
                         <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                         <span>Send Newsletter</span>
                     </a>
                 </li>
+
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -37,10 +40,20 @@
                         <li><a href="@Url.Action("Index", "BannedWords")">BannedWords</a></li>
                         <li><a href="@Url.Action("Index", "Users")">Users</a></li>
                         <li><a href="@Url.Action("Index", "AdminMessages")">AdminMessages</a></li>
+                        <li><a href="@Url.Action("Index", "CategoryAttributes")">CategoryAttributes</a></li>
                     </ul>
                 </li>
 
+            }
+
+            @{
                 int id2 = ClassifiedMVC.Controllers.ClassifiedsController.howManyReported();
+            }
+
+            @if (User.IsInRole("Admin"))
+            {
+               
+
                 <li>
                     <a href="@Url.Action("Index", "Classifieds", new { ReportedOnly = true })" class="MyProfileLink">
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
@@ -55,42 +68,43 @@
                     </a>
                 </li>
             }
+            
 
-        <li>
-            @{
-                int id = ClassifiedMVC.Controllers.HomeController.howManyNms2(User.Identity.GetUserId());
-            }
-            <a href="@Url.Action("MyMessages", "Home")" class="MyProfileLink">
-                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                @if (id == 0)
-                {
-                    <span id="sumOfNewMessages" style="color:gray">(0)</span>
+            <li>
+                @{
+                    int id = ClassifiedMVC.Controllers.HomeController.howManyNms2(User.Identity.GetUserId());
                 }
-                else
-                {
-                    <span id="sumOfNewMessages" style="color:red">(@id)</span>
-                }
-            </a>
+                <a href="@Url.Action("MyMessages", "Home")" class="MyProfileLink">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    @if (id == 0)
+                    {
+                        <span id="sumOfNewMessages" style="color:gray">(0)</span>
+                    }
+                    else
+                    {
+                        <span id="sumOfNewMessages" style="color:red">(@id)</span>
+                    }
+                </a>
 
-        </li>
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
-    }
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <a href="@Url.Action("Create", "Classifieds")" class="addClassifiedLink">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <span> Add Classified</span>
-            </a>
+            </li>
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+                        }
+                    }
+                    else
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="@Url.Action("Create", "Classifieds")" class="addClassifiedLink">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    <span> Add Classified</span>
+                                </a>
 
-        </li>
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
-}
+                            </li>
+                            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        </ul>
+                    }

@@ -98,6 +98,8 @@ namespace ClassifiedMVC.Controllers
                         smtp.Send(mailMessage);
                     }
                 }
+
+                BEST = null;
             }          
            
 
